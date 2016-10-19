@@ -1,4 +1,4 @@
-package com.ztm.entity;
+package com.jsdx.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

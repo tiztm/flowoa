@@ -1,7 +1,7 @@
-package com.ztm.controller;
+package com.jsdx.controller;
 
-import com.ztm.entity.Customer;
-import com.ztm.service.CustomerService;
+import com.jsdx.entity.Customer;
+import com.jsdx.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;

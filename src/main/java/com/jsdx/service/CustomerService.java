@@ -1,8 +1,8 @@
-package com.ztm.service;
+package com.jsdx.service;
 
 import java.util.List;
 
-import com.ztm.entity.Customer;
+import com.jsdx.entity.Customer;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CustomerService extends CrudRepository<Customer, Long> {
