@@ -33,7 +33,7 @@ public class Application extends SpringBootServletInitializer {
      *  <scope>provided</scope>
      *  </dependency>
      *
-     *  这一段
+     *  这一段,然后执行这个main方法
      *
      *
      * @param args
