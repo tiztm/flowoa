@@ -1,6 +1,5 @@
 package com.jsdx.controller;
 
-import com.core.service.CommonSQLService;
 import com.jsdx.entity.Customer;
 import com.jsdx.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +18,9 @@ import java.util.List;
 @RestController
 public class CustomerController {
 
-
-
 	@Autowired
 	private CustomerService customerService;
 
-	@Autowired
-	private CommonSQLService commonSQLService;
 
 	@Autowired
 	private Date dat;
@@ -42,11 +37,12 @@ public class CustomerController {
 	 * 直接调用sql示例
 	 * @return
 	 */
-	@RequestMapping("/")
+	@RequestMapping("/cusCount")
 	@Transactional
 	ModelAndView index() {
 
-		String count = commonSQLService.rtnCount();
+		List<Customer> byFirstName = customerService.findByFirstName("1");
+		String count = byFirstName.size()+"";
 
 		return new ModelAndView("custom.jsp","count",count);
 	}
