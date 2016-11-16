@@ -11,9 +11,11 @@ import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
+
     @Override
     protected SpringApplicationBuilder configure(
             SpringApplicationBuilder application) {
+        setRegisterErrorPageFilter(false); // <- this one
         return application.sources(Application.class);
     }
 
