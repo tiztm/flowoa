@@ -3,6 +3,7 @@ package com.jsdx.biz.controller;
 import com.jsdx.biz.entity.Customer;
 import com.jsdx.biz.service.CustomerService;
 import com.jsdx.core.controller.BaseController;
+import com.jsdx.core.entity.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping ( "/customer" )
@@ -26,12 +26,17 @@ public class CustomerController extends BaseController {
 	 */
 	Logger logger = LoggerFactory.getLogger(getClass());
 
+	/**
+	 * 用来传递ajax结果
+	 */
+	Result result;
+
 	@Resource
 	private CustomerService customerService;
 
 	/**
 	 * 测试用页面，显示总数
-	 */
+
 	@RequestMapping("/cusCount")
 	public ModelAndView cusCount() {
 
@@ -39,8 +44,7 @@ public class CustomerController extends BaseController {
 		String count = all.size()+"";
 		//logger.error(count);
 		return new ModelAndView("cusCount","count",count);
-	}
-
+	}*/
 
 	/**
 	 * 分页列表数据
@@ -57,11 +61,37 @@ public class CustomerController extends BaseController {
 	}
 
 
+	@RequestMapping("/editSubmit")
+	public Result editSubmit(Customer cus){
+
+		//logger.error(cus.toString());
+
+		customerService.saveAndFlush(cus);
+
+		result = new Result(Result.Status.OK);
+
+		return result;
+	}
+
+
+
+
+
+
 	/**
 	 * 分页列表
 	 */
 	@RequestMapping("/list")
 	public ModelAndView list(){
+		return new ModelAndView();
+	}
+
+
+	/**
+	 * 添加页面
+	 */
+	@RequestMapping("/edit")
+	public ModelAndView edit(){
 		return new ModelAndView();
 	}
 

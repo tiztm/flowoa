@@ -17,13 +17,13 @@ import java.io.Serializable;
 public class BaseJPAModel implements Serializable {
 
 
+    protected String id;
+
+
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
     @Column(name = "id",length = 32)
-    protected String id;
-
-
     public String getId() {
         return id;
     }

@@ -49,4 +49,9 @@ public class Customer extends BaseJPAModel {
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+
+    @Override
+    public String toString() {
+        return firstName+"-"+lastName;
+    }
 }

@@ -11,7 +11,9 @@
 <!-- zui -->
 <link href="/zui/css/zui.min.css" rel="stylesheet">
 
-<link href="/zui/lib/datatable/zui.datatable.min.css" rel="stylesheet">
+<link href="/zui/lib/datatable/zui.datatable.css" rel="stylesheet">
+<link href="/zui/lib/datetimepicker/datetimepicker.css"  rel="stylesheet">
+
 <!--[if lt IE 9]>
 <script src="/zui/lib/ieonly/html5shiv.js"></script>
 <script src="/zui/lib/ieonly/respond.js"></script>
@@ -19,5 +21,7 @@
 <![endif]-->
 <!-- ZUI Javascript组件 -->
 <script src="/zui/js/jquery-1.11.0.min.js"></script>
+<script src="/jslib/jquery.form.js"></script>
 <script src="/zui/js/zui.min.js"></script>
-<script src="/zui/lib/datatable/zui.datatable.min.js"></script>
+<script src="/zui/lib/datatable/zui.datatable.js"></script>
+<script src="/zui/lib/datetimepicker/datetimepicker.js"></script>

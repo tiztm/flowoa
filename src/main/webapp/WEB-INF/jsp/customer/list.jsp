@@ -5,54 +5,24 @@
 <body style="height: 100%">
 
 <header>
+    <div class="btn-group">
 
-    <div class="btn-group" style="float: right">
-        <button class="btn btn-primary" id="btnAdd">新增</button>
+        <button type="button" class="btn btn-primary" data-icon="add" data-iframe="edit"
+                data-backdrop="false" data-toggle="modal" data-size="" data-height="600">新增
+        </button>
+
         <button class="btn btn-danger">删除</button>
     </div>
-
 </header>
 
-<section>
+<section style="padding-top: 10px">
 
-    <table class="table datatable">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>时间</th>
-
-            <th>事件类型</th>
-            <th>描述</th>
-            <th>相关人物</th>
-            <th>评分</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>1333</td>
-            <td>1</td>
-            <td>1333</td>
-            <td>1</td>
-            <td>1333</td>
-        </tr>
-
-        </tbody>
-    </table>
+    <!-- div 数据表格 -->
+    <div class="datatable" ></div>
 
 </section>
 
 <footer>
-
-    <ul class="pager">
-        <li class="previous"><a href="your/nice/url">«</a></li>
-        <li><a href="your/nice/url">1</a></li>
-        <li class="active"><a href="your/nice/url">2</a></li>
-        <li><a href="your/nice/url">3</a></li>
-        <li><a href="your/nice/url">4</a></li>
-        <li><a href="your/nice/url">5</a></li>
-        <li class="next"><a href="your/nice/url">»</a></li>
-    </ul>
 
 </footer>
 
@@ -62,9 +32,91 @@
         alert(11);
     }
 
-    $('table.datatable').datatable({checkable: true});
-
     $('#btnAdd').bind("click", add);
+
+
+
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+
+    function cvtContent2Data(info, content) {
+        //info.rows = content;
+        info.rows = [];
+        for(var i=0;i<content.length;i++){
+            info.rows[i] = {};
+            var inforow = info.rows[i];
+            inforow.checked = false;
+            inforow.data = [];
+
+            var currow = content[i];
+
+            for(var j=0;j<info.cols.length;j++){
+
+
+                var rowcontent = currow[info.cols[j].name];
+
+                if(rowcontent!=null&&info.cols[j].type == 'date')
+                {
+                    rowcontent = (new Date(rowcontent)).Format("yyyy-MM-dd hh:mm:ss") ;
+                }
+
+                inforow.data[j] = rowcontent==null?"":rowcontent;
+
+            }
+
+        }
+
+
+    }
+
+    $.ajax({
+        url:"${pageContext.request.contextPath}/customer/listData.action",
+        type:"POST",
+        dataType:"json",
+        success:function(json){
+
+            //定义列
+            var info = {
+                cols: [
+
+
+                    {width: 80, text: '姓名', name:'firstName',type: 'string', flex: true, colClass: ''},
+                    {width: 80, text: '年龄', name:'age',type: 'number', flex: true, colClass: ''},
+                    {width: 160, text: '出生日期', name:'birthday',type: 'date', flex: false, sort: 'down'},
+                    {width: 80, text: '#',name:'id', type: 'string', ignore:true}
+                ]
+            };
+
+            //数据转化
+            cvtContent2Data(info,json.content);
+
+            //生成数据表格
+            $('.datatable').datatable({
+                data: info,
+                checkable: true,
+                sortable: true,
+
+            });
+        },
+        error:function(){
+            alert('服务器异常');
+        }
+    });
+
 
 </script>
 
