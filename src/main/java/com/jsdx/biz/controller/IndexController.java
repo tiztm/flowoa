@@ -1,12 +1,19 @@
 package com.jsdx.biz.controller;
 
+import com.jsdx.biz.entity.ApiType;
+import com.jsdx.biz.service.ApiHelpsService;
+import com.jsdx.biz.service.ApiTypeService;
 import com.jsdx.core.controller.BaseController;
 import com.jsdx.core.entity.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 
 @Controller
@@ -23,14 +30,34 @@ public class IndexController extends BaseController {
 	 */
 	Result result;
 
+	@Resource
+	private ApiHelpsService apiHelpsService;
 
+
+	@Resource
+	private ApiTypeService apiTypeService;
 	/**
-	 * 添加页面
+	 * 首页
 	 */
 	@RequestMapping("/")
-	public ModelAndView edit(){
-		return new ModelAndView("myapi");
+	public ModelAndView index(){
+
+		List<ApiType> all = apiTypeService.findAll();
+		return new ModelAndView("myapi").addObject("apiTypeList", all);
 	}
+
+	/**
+	 * 首页
+	 */
+	@RequestMapping("/{apiTypeName}")
+	public ModelAndView index(@PathVariable("apiTypeName") String apiTypeName){
+		List<ApiType> all = apiTypeService.findAll();
+			return new ModelAndView("templetapi").addObject("apiTypeList", all).addObject("nowType", apiTypeName);
+
+	}
+
+
+
 
 
 

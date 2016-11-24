@@ -1,10 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <head>
     <script src="/jslib/jquery.1.7.min.js"></script>
     <script src="/jslib/jquery.masonry.min.js"></script>
     <script src="/jslib/jquery.quicksearch.js"></script>
 
     <link href="/csslib/default.css" rel="stylesheet">
+
 </head>
 <body class="cheat-detail">
 
@@ -27,29 +30,13 @@
     <a id="logo" href="/">API速查</a>
 
     <ul id="navlist" class="nav">
-        <li><a href="/python" title="Python Cheat Sheet">Python</a></li>
-        <li><a href="/jquery" title="jQuery Cheat Sheet">jQuery</a></li>
-        <li><a href="/nodejs" title="NodeJS Cheat Sheet">NodeJS</a></li>
-        <li><a href="/php" title="PHP Cheat Sheet">PHP</a></li>
-        <li><a href="/java" title="Java Cheat Sheet">Java</a></li>
-        <li><a href="/ruby" title="Ruby Cheat Sheet">Ruby</a></li>
-        <li><a href="/javascript" title="Javascript Cheat Sheet">Javascript</a></li>
-        <li><a href="/actionscript" title="ActionScript Cheat Sheet">ActionScript</a></li>
-        <li><a href="/css" title="CSS Cheat Sheet">CSS</a></li>
-        <li><a href="/express" title="Express Cheat Sheet">Express</a></li>
+        <c:forEach var="apis" items="${apiTypeList}" >
+            <li><a href="/${apis.name}" >${apis.name}</a></li>
+        </c:forEach>
 
     </ul>
 </div>
 
-<div style="position:fixed;right:105px;top:10px;z-index:200;">
-    <input type="" id="searchApi" placeholder="搜索"/>
-</div>
-<div class="addthis_toolbox addthis_default_style" style="position:fixed;right:5px;top:17px;z-index:200;">
-    <a class="addthis_button_facebook"></a>
-    <a class="addthis_button_twitter"></a>
-    <a class="addthis_button_sinaweibo"></a>
-    <a class="addthis_button_compact"></a>
-</div>
 
 
 <div class="content">

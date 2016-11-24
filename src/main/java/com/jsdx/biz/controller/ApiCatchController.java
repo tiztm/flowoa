@@ -9,6 +9,7 @@ import com.jsdx.core.controller.BaseController;
 import com.jsdx.core.entity.Result;
 import core.util.HTMLUtil;
 import core.util.HttpclientUtil;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,11 @@ public class ApiCatchController extends BaseController {
 
 		List<ApiType> apiList = apiTypeService.findAll();
 
+
+		DefaultHttpClient defaultHttpClient = HttpclientUtil.getDefaultHttpClient();
+		defaultHttpClient.getParams().setParameter("http.connection.timeout", Integer.valueOf(10000));
+		defaultHttpClient.getParams().setParameter("http.socket.timeout", Integer.valueOf(10000));
+
 		for (ApiType apiHelps : apiList) {
 			//logger.debug();
 
@@ -55,7 +61,8 @@ public class ApiCatchController extends BaseController {
 			while (s == null)
 			{
 			try {
-				 s = HttpclientUtil.get(apiHelps.getUrl());
+
+				s = HttpclientUtil.get(apiHelps.getUrl(),null,null,defaultHttpClient);
 			} catch (Exception e) {
 				e.printStackTrace();
 				try {
@@ -67,12 +74,12 @@ public class ApiCatchController extends BaseController {
 			}
 
 
-				s=s.replaceAll("\n", "").replaceAll("\r", "").replaceAll(" ", "");
+				s=s.replaceAll("\n", "").replaceAll("\r", "");//.replaceAll(" ", "");
+				//logger.debug(s);
+
 
 				List<String> patternString = HTMLUtil.getPatternString(s,
-						"<divclass=\"board\">.*?</div></div>");
-
-
+						"<div class=\"board\">.*?</div>    </div>");
 
 				int order = 0;
 				for (String tips : patternString) {
@@ -81,13 +88,8 @@ public class ApiCatchController extends BaseController {
 					spileTips(tips,apiHelps,order);
 					order++;
 
+
 				}
-
-				//String tipsDiv = "<divclass=\"board\"><h2class=\"board-title\">Resource</h2><divclass=\"board-card\"><h3class=\"board-card-title\">Online</h3><ul><li><ahref=\"http://www.mysql.com/\">OfficialWebsite</a></li></ul></div><divclass=\"board-card\"><h3class=\"board-card-title\">Download</h3><ul><li><ahref=\"/static/cs/mysql_cheat_sheet.pdf\">MySQLCheatSheet[.pdf]</a></li><li><ahref=\"/static/cs/MySQL_QuickRef.pdf\">MySQLDatabaseQuickReference[.pdf]</a></li></ul></div><divclass=\"board-card\"><h3class=\"board-card-title\">Related</h3><ul><li><ahref=\"/db2\"title=\"DB2CheatSheet\">DB2</a></li><li><ahref=\"/oracle\"title=\"OracleCheatSheet\">Oracle</a></li><li><ahref=\"/postgresql\"title=\"PostgreSQLCheatSheet\">PostgreSQL</a></li><li><ahref=\"/sql\"title=\"SQLCheatSheet\">SQL</a></li><li><ahref=\"/sqlite\"title=\"SQLiteCheatSheet\">SQLite</a></li><li><ahref=\"/sybase\"title=\"SybaseCheatSheet\">Sybase</a></li></ul></div></div>";
-
-
-
-				logger.debug(patternString.size()+"");
 
 
 		}
@@ -98,37 +100,48 @@ public class ApiCatchController extends BaseController {
 	private void spileTips(String tipsDiv,ApiType apiType,int order) {
 
 		//
-		String helpName = HTMLUtil.getBetweenString(tipsDiv, "<h2class=\"board-title\">", "</h2>");
-		ApiHelps ah = new ApiHelps();
-		ah.setName(helpName);
-		ah.setApiType(apiType);
-		ah.setOrder(order);
+		String helpName = HTMLUtil.getBetweenString(tipsDiv, "<h2 class=\"board-title\">", "</h2>");
+		ApiHelps ah = new ApiHelps(helpName,order,apiType);
 		ah.setNeedTran(true);
 		apiHelpsService.saveAndFlush(ah);
 
 		// <divclass="board-card">   </div>
-		List<String> patternString = HTMLUtil.getPatternString(tipsDiv, "<divclass=\"board-card\">.*?</div>");
+		List<String> patternString = HTMLUtil.getPatternString(tipsDiv, "<div class=\"board-card\">.*?</div>");
 		int orderCard = 0;
 		for (String cardTitle : patternString) {
-			String cardName = HTMLUtil.getBetweenString(cardTitle, "<h3class=\"board-card-title\">", "</h3>");
+			String cardName = HTMLUtil.getBetweenString(cardTitle, "<h3 class=\"board-card-title\">", "</h3>");
 
-			ApiHelps ah2 = new ApiHelps();
-			ah2.setName(cardName);
-			ah2.setApiType(apiType);
-			ah.setOrder(orderCard);
+			ApiHelps ah2 = new ApiHelps(cardName,orderCard,null);
 			ah2.setParentHelps(ah);
 			apiHelpsService.saveAndFlush(ah2);
 
 			orderCard++;
 
-			List<String> liList = HTMLUtil.getPatternString(cardTitle, "<li>.*?</li>");
+			List<String> liList = HTMLUtil.getPatternString(cardTitle, "<li.*?</li>");
 			for (int i = 0; i < liList.size(); i++) {
-				String name = liList.get(i);
+				String tipDiv = liList.get(i);
 
-				ApiHelps ah3 = new ApiHelps();
-				ah3.setName(name);
-				ah3.setApiType(apiType);
-				ah3.setOrder(i);
+
+
+				String name = HTMLUtil.getBetweenString(tipDiv, "\">","</");
+
+				if(name==null||name.length()<1)
+					name = HTMLUtil.getBetweenString(tipDiv, ">","</");
+
+
+				String ahref = HTMLUtil.getBetweenString(tipDiv, "a href=\"","\"");
+				String title = HTMLUtil.getBetweenString(tipDiv, "title=\"","\"");
+
+
+				String tips = HTMLUtil.getBetweenString(tipDiv, "<li class=\"tip\">","</li>");
+
+
+				ApiHelps ah3 = new ApiHelps(name,i,null);
+
+				ah3.setaHref(ahref);
+				ah3.setaTitle(title);
+				ah3.setAtip(tips);
+
 				ah3.setParentHelps(ah2);
 				apiHelpsService.saveAndFlush(ah3);
 			}
