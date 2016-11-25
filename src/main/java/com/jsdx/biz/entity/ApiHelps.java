@@ -31,10 +31,18 @@ public class ApiHelps extends BaseJPAModel {
 
     private ApiType apiType;
 
-    private Integer order;
+    private Integer sortSQ;
 
     private List<ApiHelps> childHelpsList;
 
+    public ApiHelps(String name, Integer sortSQ, ApiType apiType) {
+        this.name = name;
+        this.sortSQ = sortSQ;
+        this.apiType = apiType;
+    }
+
+    public ApiHelps() {
+    }
 
     public String getName() {
         return name;
@@ -122,11 +130,11 @@ public class ApiHelps extends BaseJPAModel {
         this.childHelpsList = childHelpsList;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getSortSQ() {
+        return sortSQ;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setSortSQ(Integer sortSQ) {
+        this.sortSQ = sortSQ;
     }
 }

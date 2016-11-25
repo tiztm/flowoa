@@ -71,7 +71,6 @@ body {background:#f5f3ef;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif
 
 #navbar{position:fixed;background:#000;background:rgba(0,0,0,0.6);height:40px;line-height:40px;color:#fff;width:100%;filter:alpha(opacity=60);z-index:100;}
 #navbar a{color:#fff;text-decoration:none;font-size:14px;outline:none;}
-#navbar a:visited{color:#000;}
 #navbar a:hover{color:#999;}
 #navbar a#logo{color:#fff;font-size:18px;font-weight:bold;float:left;margin-right:20px;margin-left:15px;}
 #navlist{float:left;}
