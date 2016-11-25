@@ -102,7 +102,7 @@ public class ApiHelps extends BaseJPAModel {
 
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity=ApiHelps.class)
-    @JoinColumn(name = "HELP_ID",foreignKey=@ForeignKey(name="null"))
+    @JoinColumn(name = "HELP_ID",foreignKey = @ForeignKey(name = "none",value = ConstraintMode.NO_CONSTRAINT))
     public ApiHelps getParentHelps() {
         return parentHelps;
     }
