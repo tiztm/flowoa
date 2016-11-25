@@ -32,11 +32,5 @@ public class DateSpanUtil {
 		nowDate = nDate;
 	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		new DateSpanUtil();
-	}
 
 }
