@@ -56,55 +56,121 @@ public class ApiCatchController extends BaseController {
 
 		for (ApiType apiHelps : apiList) {
 
-			if(apiHelps.getUrl()==null||apiHelps.getUrl().length()<1) continue;
+			if(apiHelps.getNeedCatch().equals("0")||apiHelps.getUrl()==null||apiHelps.getUrl().length()<1) continue;
 
 
 			String s = null;
 			while (s == null)
 			{
-			try {
-
-				s = HttpclientUtil.get(apiHelps.getUrl(),null,null,defaultHttpClient);
-			} catch (Exception e) {
-				e.printStackTrace();
 				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
+
+					s = HttpclientUtil.get(apiHelps.getUrl(),null,null,defaultHttpClient);
+				} catch (Exception e) {
+					e.printStackTrace();
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
-			}
 
 
-				s=s.replaceAll("\n", "").replaceAll("\r", "");//.replaceAll(" ", "");
-				//logger.debug(s);
-
-
-				List<String> patternString = HTMLUtil.getPatternString(s,
-						"<div class=\"board\">.*?</div>    </div>");
-
-				int order = 0;
-				for (String tips : patternString) {
-					//logger.debug(tips);
-
-					spileTips(tips,apiHelps,order);
-					order++;
-
-
-				}
+			s=s.replaceAll("\n", "").replaceAll("\r", "");//.replaceAll(" ", "");
+			apiHelps.setFromOverAPi(s);
 
 
 		}
 
+		apiTypeService.save(apiList);
+
 		return new Result(Result.Status.OK,apiList.size());
 	}
 
+	/**
+	 * 分析
+	 */
+	@RequestMapping("/apiAna")
+	public Result apiAna(){
+
+		List<ApiType> apiList = apiTypeService.findAll();
+
+
+
+		for (ApiType apiHelps : apiList) {
+
+			if(apiHelps.getNeedCatch().equals("0")||apiHelps.getFromOverAPi()==null||apiHelps.getFromOverAPi().length()<1||apiHelps.getUrl()==null||apiHelps.getUrl().length()<1) continue;
+
+
+			String s = apiHelps.getFromOverAPi();
+
+			//curVersion
+
+
+				List<String> patternString = HTMLUtil.getPatternString(s,
+						"<div class=\"board.*?</div>    </div>");
+
+
+
+				if(patternString.size()<1) continue;
+
+			Integer curVersion = apiHelps.getCurVersion()==null?0:apiHelps.getCurVersion();
+
+			curVersion = curVersion+1;
+
+
+
+			//删除该Type下所有无用的
+			//apiHelpsService.deleteByApiType(apiType);
+
+			List<ApiHelps> apiHelpsList = apiHelps.getApiHelpsList();
+
+			for (ApiHelps helps : apiHelpsList) {
+				if(helps.getCurVersion()!=-1)
+					helps.setCurVersion(curVersion);
+			}
+
+			apiHelpsService.save(apiHelpsList);
+
+
+
+			apiHelps.setCurVersion(curVersion);
+
+			int order = 0;
+
+
+
+				for (String tips : patternString) {
+					//logger.debug(tips);
+					spileTips(tips,apiHelps,order);
+					order++;
+				}
+
+		}
+
+		apiTypeService.save(apiList);
+
+
+		return new Result(Result.Status.OK,apiList.size());
+	}
+
+
+	/**
+	 * 分析页面
+	 * TODO:
+	 * Related  暂时不显示
+	 *
+	 *
+	 */
 	private void spileTips(String tipsDiv,ApiType apiType,int order) {
 
-		//
+
+
+
 		String helpName = HTMLUtil.getBetweenString(tipsDiv, "<h2 class=\"board-title\">", "</h2>");
 		ApiHelps ah = new ApiHelps(helpName,order,apiType);
 		ah.setNeedTran(true);
+		ah.setCurVersion(0);
 		apiHelpsService.saveAndFlush(ah);
 
 		// <divclass="board-card">   </div>
@@ -119,20 +185,27 @@ public class ApiCatchController extends BaseController {
 
 			orderCard++;
 
-			List<String> liList = HTMLUtil.getPatternString(cardTitle, "<li.*?</li>");
+			List<String> liList = HTMLUtil.getPatternString(cardTitle, "<li.*?</li>\\s");
 			for (int i = 0; i < liList.size(); i++) {
 				String tipDiv = liList.get(i);
 
 
 
-				String name = HTMLUtil.getBetweenString(tipDiv, "\">","</");
+				String name = HTMLUtil.getBetweenString(tipDiv, "\">","</a><");
+
+				if(name==null||name.length()<1)
+					name = HTMLUtil.getBetweenString(tipDiv, "\">","</li>\\s");
+
+				if(name==null||name.length()<1)
+					name = HTMLUtil.getBetweenString(tipDiv, "\">","</");
 
 				if(name==null||name.length()<1)
 					name = HTMLUtil.getBetweenString(tipDiv, ">","</");
 
 
-				String ahref = HTMLUtil.getBetweenString(tipDiv, "a href=\"","\"");
+				String ahref = HTMLUtil.getBetweenString(tipDiv, "href=\"","\"");
 				String title = HTMLUtil.getBetweenString(tipDiv, "title=\"","\"");
+
 
 
 				String tips = HTMLUtil.getBetweenString(tipDiv, "<li class=\"tip\">","</li>");
@@ -150,11 +223,6 @@ public class ApiCatchController extends BaseController {
 
 
 		}
-		//<h3class="board-card-title">Download</h3>
-
-		//<li><ahref="/static/cs/mysql_cheat_sheet.pdf">MySQLCheatSheet[.pdf]</a></li>
-//		 <li>FLOAT</li>
-//                <li class="tip">Decimal (precise to 23 digits)</li>
 
 
 

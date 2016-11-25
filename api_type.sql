@@ -1,34 +1,9 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : thinkpad.me_3306
-Source Server Version : 50168
-Source Host           : 192.168.0.101:3306
-Source Database       : springboottest
-
-Target Server Type    : MYSQL
-Target Server Version : 50168
-File Encoding         : 65001
-
-Date: 2016-11-23 17:58:11
-*/
-
-SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for api_type
--- ----------------------------
-DROP TABLE IF EXISTS `api_type`;
-CREATE TABLE `api_type` (
-  `id` varchar(32) NOT NULL,
-  `isusing` bit(1) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `need_catch` bit(1) NOT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of api_type
--- ----------------------------
-INSERT INTO `api_type` VALUES ('1', '', 'mysql', '', 'http://overapi.com/mysql');
+INSERT INTO `api_type` VALUES ('1', '1', 'MySQL', '0', 'http://overapi.com/mysql', 1);
+INSERT INTO `api_type` VALUES ('2', '1', 'Java', '0', 'http://overapi.com/java', 1);
+INSERT INTO `api_type` VALUES ('3', '1', 'JavaScript', '0', 'http://overapi.com/javascript', 1);
+INSERT INTO `api_type` VALUES ('4', '1', 'HTML', '0', 'http://overapi.com/html', NULL);
+INSERT INTO `api_type` VALUES ('5', '1', 'jQuery', '0', 'http://overapi.com/jquery', 3);
+INSERT INTO `api_type` VALUES ('6', '1', 'Hibernate', '0', 'http://overapi.com/hibernate', 5);
+INSERT INTO `api_type` VALUES ('7', '1', 'Linux', '1', 'http://overapi.com/linux', 1);
+INSERT INTO `api_type` VALUES ('8', '1', 'CSS', '0', 'http://overapi.com/css', 6);
+INSERT INTO `api_type` VALUES ('9', '1', 'Spring Framework', '1', 'http://overapi.com/spring', NULL);

@@ -33,6 +33,8 @@ public class ApiHelps extends BaseJPAModel {
 
     private Integer sortSQ;
 
+    private Integer curVersion;
+
     private List<ApiHelps> childHelpsList;
 
     public ApiHelps(String name, Integer sortSQ, ApiType apiType) {
@@ -136,5 +138,14 @@ public class ApiHelps extends BaseJPAModel {
 
     public void setSortSQ(Integer sortSQ) {
         this.sortSQ = sortSQ;
+    }
+
+
+    public Integer getCurVersion() {
+        return curVersion;
+    }
+
+    public void setCurVersion(Integer curVersion) {
+        this.curVersion = curVersion;
     }
 }
