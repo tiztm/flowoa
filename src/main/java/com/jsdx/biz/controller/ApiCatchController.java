@@ -7,8 +7,8 @@ import com.jsdx.biz.service.ApiHelpsService;
 import com.jsdx.biz.service.ApiTypeService;
 import com.jsdx.core.controller.BaseController;
 import com.jsdx.core.entity.Result;
-import core.util.HTMLUtil;
-import core.util.HttpclientUtil;
+import com.jsdx.core.utils.HTMLUtil;
+import com.jsdx.core.utils.HttpclientUtil;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +55,9 @@ public class ApiCatchController extends BaseController {
 		defaultHttpClient.getParams().setParameter("http.socket.timeout", Integer.valueOf(10000));
 
 		for (ApiType apiHelps : apiList) {
-			//logger.debug();
+
+			if(apiHelps.getUrl()==null||apiHelps.getUrl().length()<1) continue;
+
 
 			String s = null;
 			while (s == null)

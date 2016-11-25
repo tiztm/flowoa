@@ -28,11 +28,10 @@
 
 
         <dependency>
-            <groupId>com.ztm</groupId>
-            <artifactId>peixun</artifactId>
-            <version>0.03</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.1</version>
         </dependency>
-
 
 
         <dependency>
