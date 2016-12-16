@@ -47,13 +47,13 @@
             <c:forEach var="ah" items="${apis.apiHelpsList}" >
 
             <div class="board ">
-                <h2 class="board-title">${ah.name}</h2>
+                <h2 class="board-title">${ah.displayName}</h2>
 
 
                 <c:forEach var="ah2" items="${ah.childHelpsList}" >
 
                 <div class="board-card">
-                    <h3 class="board-card-title">${ah2.name}</h3>
+                    <h3 class="board-card-title">${ah2.displayName}</h3>
                     <ul>
                         <c:forEach var="ah3" items="${ah2.childHelpsList}" >
 
@@ -61,10 +61,10 @@
 
 
                                 <c:if test="${fn:startsWith(ah3.aHref, '/')}">
-                                    <li><a href="http://overapi.com${ah3.aHref}" title="${ah3.aTitle}">${ah3.name}</a></li>
+                                    <li><a href="http://overapi.com${ah3.aHref}" title="${ah3.aTitle}">${ah3.displayName}</a></li>
                                 </c:if>
                                 <c:if test="${not fn:startsWith(ah3.aHref, '/')}">
-                                    <li><a href="${ah3.aHref}" title="${ah3.aTitle}">${ah3.name}</a></li>
+                                    <li><a href="${ah3.aHref}" title="${ah3.aTitle}">${ah3.displayName}</a></li>
                                 </c:if>
 
 
@@ -77,7 +77,7 @@
                             </c:if>
 
                             <c:if test="${empty ah3.aHref && empty ah3.atip}">
-                                <li>${ah3.name}</li>
+                                <li>${ah3.displayName}</li>
                             </c:if>
 
 

@@ -29,6 +29,8 @@ public class ApiType extends BaseJPAModel {
 
     private Integer curVersion;
 
+    private Integer orderBy;
+
     private List<ApiHelps> apiHelpsList;
 
 
@@ -91,5 +93,14 @@ public class ApiType extends BaseJPAModel {
 
     public void setCurVersion(Integer curVersion) {
         this.curVersion = curVersion;
+    }
+
+    @Column()
+    public Integer getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(Integer orderBy) {
+        this.orderBy = orderBy;
     }
 }

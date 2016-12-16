@@ -77,8 +77,17 @@ public class HTMLUtil {
     public static String getBetweenString(String pString, String pFirst, String pLast) {
         String pExpress = pFirst+".*?"+pLast;
         String firstPatternString = getFirstPatternString(pString, pExpress);
-        if(firstPatternString.length()>0)
-            return firstPatternString.substring(pFirst.length(),firstPatternString.length()-pLast.length());
+        if(firstPatternString.length()>0&&firstPatternString.length() > (pFirst.length()+pLast.length())) {
+
+            String substring = null;
+            try {
+                substring = firstPatternString.substring(pFirst.length(), firstPatternString.length() - pLast.length());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return substring;
+        }
         else
             return "";
     }

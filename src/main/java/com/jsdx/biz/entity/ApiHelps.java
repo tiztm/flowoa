@@ -35,6 +35,8 @@ public class ApiHelps extends BaseJPAModel {
 
     private Integer curVersion;
 
+    private String displayName;
+
     private List<ApiHelps> childHelpsList;
 
     public ApiHelps(String name, Integer sortSQ, ApiType apiType) {
@@ -70,6 +72,7 @@ public class ApiHelps extends BaseJPAModel {
         this.aHref = aHref;
     }
 
+    @Column(length = 2000)
     public String getaTitle() {
         return aTitle;
     }
@@ -147,5 +150,17 @@ public class ApiHelps extends BaseJPAModel {
 
     public void setCurVersion(Integer curVersion) {
         this.curVersion = curVersion;
+    }
+
+    @Transient
+    public String getDisplayName() {
+        if(tranName!=null&&tranName.length()>0) return tranName;
+
+
+        return name;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }
